@@ -206,7 +206,12 @@ Para interagir com as rotas protegidas, primeiro obtenha um Bearer Token.
     "data": {
       "syndic_name": "João Silva",
       "phone": "11999999999",
-      // ... outros campos
+      "condominium_name": "Residencial das Flores",
+      "zip_code": "01310-100",
+      "email": "joao@email.com",
+      "status": "open",
+      "updated_at": "2026-03-16T20:08:19.000000Z",
+      "created_at": "2026-03-16T20:08:19.000000Z",
       "id": 1
     }
   }
@@ -234,7 +239,14 @@ Para interagir com as rotas protegidas, primeiro obtenha um Bearer Token.
       {
         "id": 1,
         "syndic_name": "João Silva",
-        // ... outros campos
+        "phone": "11999999999",
+        "condominium_name": "Residencial das Flores",
+        "zip_code": "01310-100",
+        "email": "joao@email.com",
+        "status": "open",
+        "deleted_at": null,
+        "created_at": "2026-03-16T20:08:19.000000Z",
+        "updated_at": "2026-03-16T20:08:19.000000Z"
       }
     ],
     "meta": {
@@ -277,12 +289,22 @@ Para interagir com as rotas protegidas, primeiro obtenha um Bearer Token.
   {
     "id": 1,
     "syndic_name": "João Silva",
-    // ... outros campos
+    "phone": "11999999999",
+    "condominium_name": "Residencial das Flores",
+    "zip_code": "01310-100",
+    "email": "joao@email.com",
+    "status": "open",
+    "deleted_at": null,
+    "created_at": "2026-03-16T20:08:19.000000Z",
+    "updated_at": "2026-03-16T20:08:19.000000Z",
     "notes": [
       {
         "id": 1,
+        "ticket_id": 1,
         "content": "Nota de exemplo.",
-        // ...
+        "deleted_at": null,
+        "created_at": "2026-03-16T20:09:00.000000Z",
+        "updated_at": "2026-03-16T20:09:00.000000Z"
       }
     ]
   }
@@ -307,8 +329,15 @@ Para interagir com as rotas protegidas, primeiro obtenha um Bearer Token.
     "message": "Ticket atualizado com sucesso.",
     "data": {
       "id": 1,
+      "syndic_name": "João da Silva",
+      "phone": "11999999999",
+      "condominium_name": "Residencial das Flores",
+      "zip_code": "01310-100",
+      "email": "joao@email.com",
       "status": "verifying",
-      // ...
+      "deleted_at": null,
+      "created_at": "2026-03-16T20:08:19.000000Z",
+      "updated_at": "2026-03-16T20:10:00.000000Z"
     }
   }
   ```
@@ -361,9 +390,11 @@ Para interagir com as rotas protegidas, primeiro obtenha um Bearer Token.
   {
     "message": "Nota criada com sucesso.",
     "data": {
-      "id": 1,
       "ticket_id": 1,
-      "content": "Cliente entrou em contato por telefone."
+      "content": "Cliente entrou em contato por telefone.",
+      "updated_at": "2026-03-16T20:11:00.000000Z",
+      "created_at": "2026-03-16T20:11:00.000000Z",
+      "id": 2
     }
   }
   ```
@@ -385,7 +416,11 @@ Para interagir com as rotas protegidas, primeiro obtenha um Bearer Token.
     "message": "Nota atualizada com sucesso.",
     "data": {
       "id": 1,
-      "content": "Conteúdo atualizado da nota."
+      "ticket_id": 1,
+      "content": "Conteúdo atualizado da nota.",
+      "deleted_at": null,
+      "created_at": "2026-03-16T20:09:00.000000Z",
+      "updated_at": "2026-03-16T20:12:00.000000Z"
     }
   }
   ```
