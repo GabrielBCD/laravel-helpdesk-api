@@ -29,16 +29,25 @@ class TicketController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        // Validar parâmetros de entrada
+        $validated = $request->validate([
+            'status' => ['nullable', 'in:open,verifying,finished'],
+            'search' => ['nullable', 'string', 'max:255'],
+            'from' => ['nullable', 'date_format:Y-m-d'],
+            'to' => ['nullable', 'date_format:Y-m-d'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $query = Ticket::query();
 
         // Filter by status
-        if ($request->has('status')) {
-            $query->where('status', $request->input('status'));
+        if ($request->has('status') && !is_null($validated['status'])) {
+            $query->where('status', $validated['status']);
         }
 
         // Search by syndic_name, condominium_name, or email
-        if ($request->has('search')) {
-            $search = $request->input('search');
+        if ($request->has('search') && !is_null($validated['search'])) {
+            $search = $validated['search'];
             $query->where(function ($q) use ($search) {
                 $q->where('syndic_name', 'like', "%{$search}%")
                   ->orWhere('condominium_name', 'like', "%{$search}%")
@@ -47,16 +56,16 @@ class TicketController extends Controller
         }
 
         // Filter by date range
-        if ($request->has('from')) {
-            $query->where('created_at', '>=', $request->input('from'));
+        if ($request->has('from') && !is_null($validated['from'])) {
+            $query->where('created_at', '>=', $validated['from'] . ' 00:00:00');
         }
 
-        if ($request->has('to')) {
-            $query->where('created_at', '<=', $request->input('to'));
+        if ($request->has('to') && !is_null($validated['to'])) {
+            $query->where('created_at', '<=', $validated['to'] . ' 23:59:59');
         }
 
         // Pagination
-        $perPage = min($request->input('per_page', 15), 100);
+        $perPage = $validated['per_page'] ?? 15;
         $tickets = $query->orderBy('created_at', 'desc')->paginate($perPage);
 
         return response()->json([
@@ -108,10 +117,18 @@ class TicketController extends Controller
     /**
      * Permanently delete the specified ticket (hard delete).
      */
-    public function forceDestroy(Request $request): JsonResponse
+    public function forceDestroy(Ticket $ticket): JsonResponse
     {
-        $ticket = Ticket::withTrashed()->findOrFail($request->route('ticket'));
-        $ticket->forceDelete();
+        // Fetch trashed ticket if it was soft-deleted
+        $trashedTicket = Ticket::withTrashed()->find($ticket->id);
+
+        if (!$trashedTicket) {
+            return response()->json([
+                'message' => 'Ticket não encontrado.',
+            ], 404);
+        }
+
+        $trashedTicket->forceDelete();
 
         return response()->json([
             'message' => 'Ticket removido com sucesso.',

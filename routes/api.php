@@ -30,5 +30,13 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user();
+    return response()->json([
+        'id' => $user->id,
+        'name' => $user->name,
+        'username' => $user->username,
+        'email' => $user->email,
+        'created_at' => $user->created_at,
+        'updated_at' => $user->updated_at,
+    ]);
 });

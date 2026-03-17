@@ -70,9 +70,8 @@ class TicketNoteController extends Controller
     /**
      * Permanently delete the specified note (hard delete).
      */
-    public function forceDestroy(Ticket $ticket, Request $request): JsonResponse
+    public function forceDestroy(Ticket $ticket, TicketNote $note): JsonResponse
     {
-        $note = TicketNote::withTrashed()->findOrFail($request->route('note'));
 
         // Verify that the note belongs to the ticket
         if ($note->ticket_id !== $ticket->id) {
